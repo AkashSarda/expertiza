@@ -129,21 +129,21 @@ describe AssignmentParticipant do
   describe ".import" do
     context 'when record is empty' do
       it 'raises an ArgumentError' do
-        expect { AssignmentParticipant.import({}, nil, nil, nil) }.to raise_error(ArgumentError, 'No user id has been specified.')
+        expect { AssignmentParticipant.import({}, nil, nil) }.to raise_error(ArgumentError, 'No user id has been specified.')
       end
     end
 
     context 'when no user is found by offered username' do
       context 'when the record has less than 4 items' do
-        byebug
         it 'raises an ArgumentError' do
+          byebug
           row = {name: 'no one', fullname: 'no one', email: 'no_one@email.com'}
           expect(ImportFileHelper).not_to receive(:create_new_user)
-          expect { AssignmentParticipant.import(row, nil, nil, nil) }.to raise_error('The record containing no one does not have enough items.')
+          expect { AssignmentParticipant.import(row, nil, nil) }.to raise_error('The record containing no one does not have enough items.')
         end
       end
 
-      '''
+      
       context 'when new user needs to be created' do
         let(:row) do
           {name: 'no one', fullname: 'no one', email: 'name@email.com', role:'user_role_name', parent: 'user_parent_name'}
@@ -156,6 +156,7 @@ describe AssignmentParticipant do
           {name: 'abc', email: 'abcbbc@gmail.com'}
         end
         it 'create the user and number of mails sent should be 1' do
+          byebug
           ActionMailer::Base.deliveries.clear
           allow(ImportFileHelper).to receive(:define_attributes).with(row).and_return(attributes)
           allow(ImportFileHelper).to receive(:create_new_user) do
@@ -171,7 +172,7 @@ describe AssignmentParticipant do
           allow(AssignmentParticipant).to receive(:exists?).and_return(false)
           allow(AssignmentParticipant).to receive(:create).and_return(participant)
           allow(AssignmentParticipant).to receive(:set_handle)
-          expect{(AssignmentParticipant.import(row, nil, {}, 1))}.to change { ActionMailer::Base.deliveries.count }.by(1)
+          expect{(AssignmentParticipant.import(row, nil, 1))}.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
 
@@ -206,7 +207,7 @@ describe AssignmentParticipant do
             expect(AssignmentParticipant.import(row, nil, {}, 1)).to be_truthy
           end
         end
-      end'''
+      end
     end
   end
 
