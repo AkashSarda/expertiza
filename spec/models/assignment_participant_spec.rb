@@ -1,3 +1,4 @@
+require 'byebug'
 describe AssignmentParticipant do
   let(:response) { build(:response) }
   let(:team) { build(:assignment_team, id: 1) }
@@ -134,6 +135,7 @@ describe AssignmentParticipant do
 
     context 'when no user is found by offered username' do
       context 'when the record has less than 4 items' do
+        byebug
         it 'raises an ArgumentError' do
           row = {name: 'no one', fullname: 'no one', email: 'no_one@email.com'}
           expect(ImportFileHelper).not_to receive(:create_new_user)
@@ -141,6 +143,7 @@ describe AssignmentParticipant do
         end
       end
 
+      '''
       context 'when new user needs to be created' do
         let(:row) do
           {name: 'no one', fullname: 'no one', email: 'name@email.com', role:'user_role_name', parent: 'user_parent_name'}
@@ -203,7 +206,7 @@ describe AssignmentParticipant do
             expect(AssignmentParticipant.import(row, nil, {}, 1)).to be_truthy
           end
         end
-      end
+      end'''
     end
   end
 

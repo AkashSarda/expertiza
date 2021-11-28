@@ -1,4 +1,5 @@
 require 'byebug'
+
 describe "CourseParticipant" do
   let(:course) { build(:course, id: 1, name: 'ECE517')  }
   let(:assignment) { build(:assignment, id: 1, name: 'no assignment', participants: [participant], teams: [team])  } 
@@ -40,6 +41,7 @@ describe "CourseParticipant" do
       end
     end
 
+    
     context 'when no user is found by provided username' do
       context 'when the record has required items' do
         let(:row) do
@@ -72,29 +74,29 @@ describe "CourseParticipant" do
     end
   end
 
-  # describe "#export" do
-  #   it "checks if csv file is created" do
-  #     options = {"personal_details" => "true"}
-  #     course_participant = create(:course_participant)
-  #     course_participant[:parent_id] = 2
-  #     CSV.open("t.csv", "ab") do |csv|
-  #       CourseParticipant.export(csv, 2, options)
-  #     end
-  #   end
-  # end
+  describe "#export" do
+    it "checks if csv file is created" do
+      options = {"personal_details" => "true"}
+      course_participant = create(:course_participant)
+      course_participant[:parent_id] = 2
+      CSV.open("t.csv", "ab") do |csv|
+        CourseParticipant.export(csv, 2, options)
+      end
+    end
+  end
 
-  # describe "#export_fields" do
-  #   it "option is empty fields is empty" do
-  #     fields = []
-  #     options = {}
-  #     expect(CourseParticipant.export_fields(options)).to be_empty
-  #   end
+  describe "#export_fields" do
+    it "option is empty fields is empty" do
+      fields = []
+      options = {}
+      expect(CourseParticipant.export_fields(options)).to be_empty
+    end
 
-  #   it "option is not empty fields is not empty" do
-  #     fields = []
-  #     options = {"personal_details" => "true"}
-  #     fields = CourseParticipant.export_fields(options)
-  #     expect(fields).not_to be_empty
-  #   end
-  # end
+    it "option is not empty fields is not empty" do
+      fields = []
+      options = {"personal_details" => "true"}
+      fields = CourseParticipant.export_fields(options)
+      expect(fields).not_to be_empty
+    end
+  end
 end
